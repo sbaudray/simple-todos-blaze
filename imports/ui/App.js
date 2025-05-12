@@ -8,3 +8,19 @@ Template.mainContainer.helpers({
     return TasksCollection.find();
   },
 });
+
+Template.form.events({
+  "submit .task-form"(event) {
+    event.preventDefault();
+
+    const target = event.target;
+    const text = target.text.value;
+
+    TasksCollection.insert({
+      text,
+      createdAt: new Date(),
+    });
+
+    target.text.value = "";
+  },
+});
