@@ -25,6 +25,12 @@ Template.mainContainer.helpers({
   hideCompleted() {
     return Template.instance().state.get(HIDE_COMPLETED_STRING);
   },
+  incompleteCount() {
+    const incompleteTaskCount = TasksCollection.find({
+      isChecked: { $ne: true },
+    }).count();
+    return incompleteTaskCount ? `${incompleteTaskCount}` : "";
+  },
 });
 
 Template.mainContainer.events({
