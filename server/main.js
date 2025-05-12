@@ -13,7 +13,7 @@ Meteor.startup(async () => {
       "Fourth Task",
       "Fifth Task",
       "Sixth Task",
-      "Seventh Task",
+      "Hire this guy!",
     ].forEach(insertTask);
   }
 });
