@@ -62,12 +62,18 @@ Template.mainContainer.helpers({
   isUserLogged() {
     return isUserLogged();
   },
+  getUser() {
+    return getUser();
+  },
 });
 
 Template.mainContainer.events({
   "click #hide-completed-button"(_event, instance) {
     const currentHideCompleted = instance.state.get(HIDE_COMPLETED_STRING);
     instance.state.set(HIDE_COMPLETED_STRING, !currentHideCompleted);
+  },
+  "click .user"() {
+    Meteor.logout();
   },
 });
 

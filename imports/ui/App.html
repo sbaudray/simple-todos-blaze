@@ -13,7 +13,9 @@
     </header>
 
     <div class="main">
-      {{#if isUserLogged}} {{> form }}
+      {{#if isUserLogged}}
+      <div class="user">{{getUser.username}} 🚪</div>
+      {{> form }}
 
       <div class="filter">
         <button id="hide-completed-button">
