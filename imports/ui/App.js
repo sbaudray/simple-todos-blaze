@@ -1,5 +1,5 @@
 import { Template } from "meteor/templating";
-import { TasksCollection } from "../api/TasksCollection";
+import { TasksCollection } from "../db/TasksCollection";
 
 import "./App.html";
 import "./Task.js";
@@ -84,11 +84,7 @@ Template.form.events({
     const target = event.target;
     const text = target.text.value;
 
-    TasksCollection.insert({
-      text,
-      createdAt: new Date(),
-      userId: getUser()._id,
-    });
+    Meteor.call("tasks.insert", text);
 
     target.text.value = "";
   },
