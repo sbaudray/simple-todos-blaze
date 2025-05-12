@@ -3,6 +3,7 @@ import { TasksCollection } from "../api/TasksCollection";
 
 import "./App.html";
 import "./Task.js";
+import "./Login.js";
 
 const HIDE_COMPLETED_STRING = "hideCompleted";
 
