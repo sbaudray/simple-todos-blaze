@@ -11,6 +11,18 @@ const isUserLogged = () => !!getUser();
 
 const HIDE_COMPLETED_STRING = "hideCompleted";
 
+const getTasksFilter = () => {
+  const user = getUser();
+
+  const hideCompletedFilter = { isChecked: { $ne: true } };
+
+  const userFilter = user ? { userId: user._id } : {};
+
+  const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter };
+
+  return { userFilter, pendingOnlyFilter };
+};
+
 Template.mainContainer.onCreated(function mainContainerOnCreated() {
   this.state = new ReactiveDict();
 });
@@ -20,20 +32,31 @@ Template.mainContainer.helpers({
     const instance = Template.instance();
     const hideCompleted = instance.state.get(HIDE_COMPLETED_STRING);
 
-    const hideCompletedFilter = { isChecked: { $ne: true } };
+    const { pendingOnlyFilter, userFilter } = getTasksFilter();
 
-    return TasksCollection.find(hideCompleted ? hideCompletedFilter : {}, {
-      sort: { createdAt: -1 },
-    }).fetch();
+    if (!isUserLogged()) {
+      return [];
+    }
+
+    return TasksCollection.find(
+      hideCompleted ? pendingOnlyFilter : userFilter,
+      {
+        sort: { createdAt: -1 },
+      }
+    ).fetch();
   },
 
   hideCompleted() {
     return Template.instance().state.get(HIDE_COMPLETED_STRING);
   },
   incompleteCount() {
-    const incompleteTaskCount = TasksCollection.find({
-      isChecked: { $ne: true },
-    }).count();
+    if (!isUserLogged()) {
+      return "";
+    }
+
+    const { pendingOnlyFilter } = getTasksFilter();
+
+    const incompleteTaskCount = TasksCollection.find(pendingOnlyFilter).count();
     return incompleteTaskCount ? `${incompleteTaskCount}` : "";
   },
   isUserLogged() {
@@ -58,6 +81,7 @@ Template.form.events({
     TasksCollection.insert({
       text,
       createdAt: new Date(),
+      userId: getUser()._id,
     });
 
     target.text.value = "";
