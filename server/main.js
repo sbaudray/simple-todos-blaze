@@ -16,7 +16,7 @@ const SEED_PASSWORD = "password";
 
 Meteor.startup(async () => {
   if (!(await Accounts.findUserByUsername(SEED_USERNAME))) {
-    Accounts.createUser({
+    await Accounts.createUserAsync({
       username: SEED_USERNAME,
       password: SEED_PASSWORD,
     });
